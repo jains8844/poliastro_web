@@ -34,5 +34,6 @@ def orbit():
     resp.headers['Content-Transfer-Encoding'] = 'base64'
     return resp
 
-app.run()
+if (__name__ == '__main__'):
+    app.run()
     
