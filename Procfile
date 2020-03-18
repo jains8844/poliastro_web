@@ -1,2 +1,1 @@
-release: ./release.sh
-web: python server.py
+web: gunicorn server:app
