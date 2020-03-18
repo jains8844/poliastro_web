@@ -1,0 +1,60 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function getFormData($form){
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function(n, i){
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+    }
+    function func()
+    {
+        console.log(form);
+        var data1 = $(form).serializeArray();
+        var data = JSON.stringify(getFormData($(form)));
+        return data;
+    }
+    function requests(){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if(this.status = 200 && this.readyState == 4)
+            {
+                var outputImg = document.getElementById('orbit');
+                if(outputImg)
+                {
+                    outputImg.src = 'data:image/png;base64, '+this.responseText;    
+                }
+                else{
+                    outputImg = document.createElement('img');
+                    outputImg.id = "orbit"
+                    outputImg.src = 'data:image/png;base64, '+this.responseText;
+                    document.body.appendChild(outputImg);
+                }
+            }
+        }
+        xhttp.open('POST', '/orbit');
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send(func());
+        return false;
+    }
+    var form = document.querySelector('form');
+</script>
+
+<form id="form1" onsubmit="requests()">
+    <input name='r_x' type='text' placeholder="r_x"><br>
+    <input name='r_y' type='text' placeholder="r_y"><br>
+    <input name='r_z' type='text' placeholder="r_z"><br>
+    <input name='v_x' type='text' placeholder="v_x"><br>
+    <input name='v_y' type='text' placeholder="v_y"><br>
+    <input name='v_z' type='text' placeholder="v_z"><br>
+    <input type=submit value = "Plot"><br>
+</form>
+<script>
+    var form = document.querySelector('form');
+    console.log(form);
+    form.addEventListener("submit", function(event){
+            event.preventDefault();
+    })
+</script>
