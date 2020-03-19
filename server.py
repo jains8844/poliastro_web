@@ -4,6 +4,7 @@ import poliastro
 from astropy import units as u
 from io import BytesIO
 from matplotlib import pyplot as plt
+import plotly
 
 from poliastro.bodies import Earth, Mars, Sun
 from poliastro.twobody import Orbit
@@ -23,7 +24,20 @@ def orbit():
     print(data)
     r = list(map(float, [data['r_x'], data['r_y'], data['r_z']])) * u.km
     v = list(map(float, [data['v_x'], data['v_y'], data['v_z']])) * u.km / u.s
+    plot_3d = False
+    interactive = False
+    if(data.get('plot_3d')):
+        plot_3d = True
+    if(data.get('interactive')):
+        interactive = True
     ss = Orbit.from_vectors(Earth, r, v)
+    if(interactive == True):
+        a = ss.plot(use_3d=plot_3d, interactive=True)
+        b = a.to_json()
+        resp = Response(b)
+        # print(len(text))
+        resp.headers['Content-Type'] = 'application/json'
+        return resp
     ss.plot()
     figfile = BytesIO()
     plt.savefig(figfile, format='png')

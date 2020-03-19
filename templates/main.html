@@ -1,4 +1,7 @@
+<html>
+<head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
     function getFormData($form){
         var unindexed_array = $form.serializeArray();
@@ -11,7 +14,6 @@
     }
     function func()
     {
-        console.log(form);
         var data1 = $(form).serializeArray();
         var data = JSON.stringify(getFormData($(form)));
         return data;
@@ -21,16 +23,35 @@
         xhttp.onreadystatechange = function () {
             if(this.status = 200 && this.readyState == 4)
             {
-                var outputImg = document.getElementById('orbit');
-                if(outputImg)
+                var outputImg = document.getElementById('orbit2');
+                var outputImg1 = document.getElementById('orbit');
+                if(document.getElementById("check2").checked)
                 {
-                    outputImg.src = 'data:image/png;base64, '+this.responseText;    
+                    if(outputImg1){
+                        outputImg1.parentNode.removeChild(outputImg1);
+                    }
+                    if(outputImg){
+                        outputImg.parentNode.removeChild(outputImg);
+                    }
+                    curve = document.createElement('div');
+                    curve.id = 'orbit2';
+                    document.body.appendChild(curve);
+                    var a = JSON.parse(xhttp.responseText);
+                    Plotly.newPlot(curve, a.data, a.layout);
+                    return;
+                }
+                if(outputImg){
+                    outputImg.parentNode.removeChild(outputImg);
+                }
+                var outputImg1 = document.getElementById('orbit');
+                if(outputImg1){
+                    outputImg1.src = 'data:image/png;base64, '+this.responseText;    
                 }
                 else{
-                    outputImg = document.createElement('img');
-                    outputImg.id = "orbit"
-                    outputImg.src = 'data:image/png;base64, '+this.responseText;
-                    document.body.appendChild(outputImg);
+                    outputImg1 = document.createElement('img');
+                    outputImg1.id = "orbit"
+                    outputImg1.src = 'data:image/png;base64, '+this.responseText;
+                    document.body.appendChild(outputImg1);
                 }
             }
         }
@@ -39,22 +60,43 @@
         xhttp.send(func());
         return false;
     }
-    var form = document.querySelector('form');
+    function interactiv(){
+        var checkBox = document.getElementById("check1");
+        if(checkBox.checked == true)
+        {
+            document.getElementById("check2").checked = true;
+        }
+    }
+    function interactiv2(){
+        var checkBox = document.getElementById("check1");
+        var check2 = document.getElementById("check2")
+        if(checkBox.checked == true && check2.checked == false)
+        {
+            document.getElementById("check1").checked = false;
+        }
+    }
+    // var form = document.querySelector('form');
 </script>
 
-<form id="form1" onsubmit="requests()">
+</head>
+
+<body>
+    <h1> Orbit from vectors </h1>
+<form id="form1">
     <input name='r_x' type='text' placeholder="r_x"><br>
     <input name='r_y' type='text' placeholder="r_y"><br>
     <input name='r_z' type='text' placeholder="r_z"><br>
     <input name='v_x' type='text' placeholder="v_x"><br>
     <input name='v_y' type='text' placeholder="v_y"><br>
     <input name='v_z' type='text' placeholder="v_z"><br>
-    <input type=submit value = "Plot"><br>
+    <input id='check1' name='plot_3d' type='checkbox' value="1" onclick="interactiv()"> 3D Plot <br>
+    <input id='check2' name='interactive' type='checkbox' value="1" onclick="interactiv2()"> Interactive <br>
+    <input type=submit value = "Plot" onclick="requests()"><br>
 </form>
 <script>
     var form = document.querySelector('form');
-    console.log(form);
     form.addEventListener("submit", function(event){
             event.preventDefault();
     })
 </script>
+</body>
