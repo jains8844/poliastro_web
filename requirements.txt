@@ -1,3 +1,4 @@
 flask
-git+git://github.com/poliastro/poliastro
+git+git://github.com/jains8844/poliastro
 gunicorn
+dash

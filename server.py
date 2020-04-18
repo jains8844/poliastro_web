@@ -35,7 +35,6 @@ def orbit():
         a = ss.plot(use_3d=plot_3d, interactive=True)
         b = a.to_json()
         resp = Response(b)
-        # print(len(text))
         resp.headers['Content-Type'] = 'application/json'
         return resp
     ss.plot()
