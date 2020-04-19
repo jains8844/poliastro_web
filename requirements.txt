@@ -2,3 +2,4 @@ flask
 git+git://github.com/jains8844/poliastro
 gunicorn
 dash
+dash-extendable-graph
