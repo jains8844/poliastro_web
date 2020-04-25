@@ -40,7 +40,7 @@ app.layout = html.Div(
             figure=iss.plot(use_3d=True, interactive=True), id="Figure"
         ),
         dcc.Interval(
-            id="interval-component", interval=50, n_intervals=0  # in milliseconds
+            id="interval-component", interval=100, n_intervals=0  # in milliseconds
         ),
     ]
 )
